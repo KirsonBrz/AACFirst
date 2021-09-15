@@ -1,6 +1,8 @@
 package com.example.aacfirst;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -21,25 +23,19 @@ public class MainActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
+        MutableLiveData<Integer> countLiveData = model.getCurrentValue();
+
+        countLiveData.observe(this, integer -> textView.setText(String.valueOf(integer)));
+
+
         textView = findViewById(R.id.countText);
         textView.setText(String.valueOf(model.getCurrentValue()));
         decreaseButton = findViewById(R.id.decreaseButton);
         increaseButton = findViewById(R.id.increaseButton);
 
-        decreaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView.setText(String.valueOf(model.getDecreasedValue()));
-            }
-        });
+        decreaseButton.setOnClickListener(view -> model.getDecreasedValue());
 
-        increaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                textView.setText(String.valueOf(model.getIncreasedValue()));
-            }
-        });
+        increaseButton.setOnClickListener(view -> model.getIncreasedValue());
 
 
     }
